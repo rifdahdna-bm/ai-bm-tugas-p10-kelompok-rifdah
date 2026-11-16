@@ -50,8 +50,8 @@ Augmentasi apa yang membantu U-Net menemukan polip pada citra kolonoskopi, dan a
 
 Contoh augmentasi yang dicoba:
 
-![Contoh augmentasi](hasil/augmentasi_flip.png)
-<!-- Ganti nama file sesuai skenario kalian (lihat isi folder hasil/). -->
+![Contoh augmentasi Rotasi dan Perubahan Skala](hasil/augmentasi_rotasi_dan_perubahan_skala.png)
+![Contoh augmentasi Distorsi Rona dan Saturasi Warna Ekstrem](hasil/augmentasi_distorsi_rona_dan_saturasi_warna_ekstrem.png)
 
 ## 4. Hasil
 
@@ -66,7 +66,12 @@ Contoh augmentasi yang dicoba:
 ![Grafik Perbandingan](hasil/perbandingan.png)
 
 ![Peta Kesalahan](hasil/peta_kesalahan.png)
-
+=======
+| Skenario | Dice (rata-rata ± sb) | IoU (rata-rata ± sb) | Dice tiap ulangan |
+|---|---|---|---|
+| Tanpa augmentasi | 0.549 ± 0.036 | 0.433 ± 0.030 | 0.595, 0.508, 0.545 |
+| Rotasi & Perubahan Skala | 0.591 ± 0.005 | 0.474 ± 0.004 | 0.588, 0.587, 0.599 |
+| Distorsi Rona & Saturasi Warna Ekstrem | 0.558 ± 0.030 | 0.436 ± 0.025 | 0.526, 0.549, 0.598 |
 
 ## 5. Analisis peta kesalahan
 
