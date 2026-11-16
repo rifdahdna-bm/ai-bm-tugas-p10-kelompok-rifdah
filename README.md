@@ -53,25 +53,15 @@ Contoh augmentasi yang dicoba:
 ![Contoh augmentasi Rotasi dan Perubahan Skala](hasil/augmentasi_rotasi_dan_perubahan_skala.png)
 ![Contoh augmentasi Distorsi Rona dan Saturasi Warna Ekstrem](hasil/augmentasi_distorsi_rona_dan_saturasi_warna_ekstrem.png)
 
-## 4. Hasil
+## 4. Hasil eksperimen
 
-### Tabel Ringkasan Evaluasi
 | Skenario | Dice (rata-rata ± sb) | IoU (rata-rata ± sb) | Dice tiap ulangan |
 | :--- | :---: | :---: | :---: |
 | Tanpa augmentasi | 0.549 ± 0.036 | 0.433 ± 0.030 | 0.595, 0.508, 0.545 |
 | Rotasi & Perubahan Skala | 0.591 ± 0.005 | 0.474 ± 0.004 | 0.588, 0.587, 0.599 |
 | Distorsi Rona & Saturasi Warna Ekstrem | 0.558 ± 0.030 | 0.436 ± 0.025 | 0.526, 0.549, 0.598 |
 
-### Grafik Perbandingan dan Peta Kesalahan
-![Grafik Perbandingan](hasil/perbandingan.png)
-
-![Peta Kesalahan](hasil/peta_kesalahan.png)
-=======
-| Skenario | Dice (rata-rata ± sb) | IoU (rata-rata ± sb) | Dice tiap ulangan |
-|---|---|---|---|
-| Tanpa augmentasi | 0.549 ± 0.036 | 0.433 ± 0.030 | 0.595, 0.508, 0.545 |
-| Rotasi & Perubahan Skala | 0.591 ± 0.005 | 0.474 ± 0.004 | 0.588, 0.587, 0.599 |
-| Distorsi Rona & Saturasi Warna Ekstrem | 0.558 ± 0.030 | 0.436 ± 0.025 | 0.526, 0.549, 0.598 |
+![Perbandingan Dice](hasil/perbandingan.png)
 
 ## 5. Analisis peta kesalahan
 
@@ -79,10 +69,10 @@ Contoh augmentasi yang dicoba:
 
 Berdasarkan visualisasi pada peta kesalahan (`hasil/peta_kesalahan.png`), pola keberhasilan dan kesalahan segmentasi model dapat dianalisis sebagai berikut:
 
-* **Area Prediksi Benar (Hijau):** Model mampu mendeteksi bagian inti polip dengan baik pada polip yang berukuran sedang hingga besar serta memiliki batas tepi yang jelas. Skenario **Rotasi & Perubahan Skala** menghasilkan cakupan warna hijau yang paling luas dan presisi dibandingkan *baseline* maupun distorsi warna ekstrem.
-* **Area *False Positive* / Prediksi Berlebih (Merah):** Kesalahan model menandai jaringan sehat sebagai polip umumnya muncul pada **lipatan dinding mukosa usus** yang menonjol serta area **pantulan cahaya lampu endoskop (*specular reflection*)** yang memiliki kontras tepi tajam menyerupai permukaan polip.
-* **Area *False Negative* / Polip Luput Terdeteksi (Biru):** Area polip yang gagal dideteksi oleh model terutama terjadi pada **polip berukuran sangat kecil**, polip bertipe datar (*flat polyp*), serta bagian tepi polip yang warna permukaannya sangat menyatu dengan mukosa usus di sekitarnya.
-* **Dampak Augmentasi pada Kasus Sulit:** Augmentasi geometrik (**Rotasi & Perubahan Skala**) terbukti membantu mengurangi area biru (*false negative*) pada polip dengan posisi miring atau ukuran bervariasi, sehingga skor Dice meningkat menjadi `0.591 ± 0.005`. Sebaliknya, **Distorsi Rona & Saturasi Warna Ekstrem** justru memperbanyak area merah (*false positive*) dan biru karena perubahan warna drastis mengaburkan batas alami antara jaringan polip dan mukosa usus.
+* **Area Prediksi Benar (Hijau):** Model mampu mendeteksi bagian inti polip dengan baik pada polip berukuran sedang hingga besar yang memiliki batas tepi jelas. Skenario **Rotasi & Perubahan Skala** menghasilkan cakupan area hijau yang paling presisi dibandingkan *baseline* maupun distorsi warna ekstrem.
+* **Area *False Positive* / Prediksi Berlebih (Merah):** Kesalahan model menandai jaringan normal sebagai polip umumnya muncul pada **lipatan dinding mukosa usus** yang bertekstur menonjol serta area **pantulan cahaya lampu endoskop (*specular reflection*)** yang memiliki kontras tepi menyerupai batas polip.
+* **Area *False Negative* / Polip Luput Terdeteksi (Biru):** Area polip yang gagal terdeteksi terutama terjadi pada **polip berukuran kecil**, polip bertipe datar (*flat polyp*), serta bagian tepi polip yang warna permukaannya sangat menyatu dengan mukosa usus di sekitarnya.
+* **Dampak Augmentasi pada Kasus Sulit:** Augmentasi geometrik (**Rotasi & Perubahan Skala**) terbukti efektif mengurangi area biru (*false negative*) pada polip dengan posisi miring atau ukuran beragam. Sebaliknya, **Distorsi Rona & Saturasi Warna Ekstrem** memperbanyak area merah (*false positive*) dan biru karena perubahan warna drastis mengaburkan batas klinis antara jaringan polip dan dinding mukosa.
 
 ## 6. Pembahasan & kesimpulan
 
@@ -97,17 +87,12 @@ Untuk tugas segmentasi polip pada citra kolonoskopi, augmentasi berbasis transfo
 
 ## 7. Pembagian kerja
 
-<!-- Siapa mengerjakan apa. Penilaian proses kerja dilihat dari riwayat commit tiap anggota. -->
-
-✍️
+* **Rifdah (`rifdahdna-bm`):** Menyusun hipotesis dan skenario augmentasi (Bagian 1–3), mengimplementasikan kode skenario augmentasi pada `segmentasi_polip.ipynb`, menjalankan eksperimen pelatihan model, serta mengunggah seluruh hasil eksperimen (`hasil/`).
+* **Suci (`suci280805-afk`):** Menarik dan mengevaluasi hasil eksperimen, menyusun tabel hasil, menuliskan analisis peta kesalahan, pembahasan perbandingan terhadap hipotesis, kesimpulan, serta merapikan dokumentasi akhir pada `README.md` (Bagian 4–8).
 
 ## 8. Penggunaan AI
 
-<!-- Wajib diisi, walau tidak memakai AI (tulis "Tidak memakai AI").
-     Contoh: "Claude Code (CLI) untuk menulis skenario augmentasi dan memperbaiki error di Bagian 4.
-     Draf Bagian 6 ditulis sendiri, lalu dirapikan bahasanya dengan bantuan AI." -->
-
-✍️
+Draf analisis peta kesalahan, pembahasan perbandingan hasil terhadap hipotesis, serta kesimpulan pada Bagian 5–6 disusun berdasarkan hasil eksperimen kelompok, lalu dirapikan struktur dan bahasanya dengan bantuan AI (Gemini).
 
 ## Cara menjalankan ulang
 
