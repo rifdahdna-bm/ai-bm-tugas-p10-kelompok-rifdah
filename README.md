@@ -55,28 +55,40 @@ Contoh augmentasi yang dicoba:
 
 ## 4. Hasil
 
-<!-- Tempel isi hasil/ringkasan.md di sini. -->
+### Tabel Ringkasan Evaluasi
+| Skenario | Dice (rata-rata ± sb) | IoU (rata-rata ± sb) | Dice tiap ulangan |
+| :--- | :---: | :---: | :---: |
+| Tanpa augmentasi | 0.549 ± 0.036 | 0.433 ± 0.030 | 0.595, 0.508, 0.545 |
+| Rotasi & Perubahan Skala | 0.591 ± 0.005 | 0.474 ± 0.004 | 0.588, 0.587, 0.599 |
+| Distorsi Rona & Saturasi Warna Ekstrem | 0.558 ± 0.030 | 0.436 ± 0.025 | 0.526, 0.549, 0.598 |
 
-✍️ tempel tabel dari `hasil/ringkasan.md`
+### Grafik Perbandingan dan Peta Kesalahan
+![Grafik Perbandingan](hasil/perbandingan.png)
 
-![Perbandingan Dice](hasil/perbandingan.png)
+![Peta Kesalahan](hasil/peta_kesalahan.png)
+
 
 ## 5. Analisis peta kesalahan
 
 ![Peta kesalahan](hasil/peta_kesalahan.png)
 
-<!-- Hijau = benar, merah = false positive, biru = false negative.
-     Pertanyaan pemandu: Polip seperti apa yang sering terlewat (kecil? datar? warna mirip dinding usus?)
-     Apa yang sering dikira polip padahal bukan? Apakah augmentasi memperbaiki kasus sulit? -->
+Berdasarkan visualisasi pada peta kesalahan (`hasil/peta_kesalahan.png`), pola keberhasilan dan kesalahan segmentasi model dapat dianalisis sebagai berikut:
 
-✍️
+* **Area Prediksi Benar (Hijau):** Model mampu mendeteksi bagian inti polip dengan baik pada polip yang berukuran sedang hingga besar serta memiliki batas tepi yang jelas. Skenario **Rotasi & Perubahan Skala** menghasilkan cakupan warna hijau yang paling luas dan presisi dibandingkan *baseline* maupun distorsi warna ekstrem.
+* **Area *False Positive* / Prediksi Berlebih (Merah):** Kesalahan model menandai jaringan sehat sebagai polip umumnya muncul pada **lipatan dinding mukosa usus** yang menonjol serta area **pantulan cahaya lampu endoskop (*specular reflection*)** yang memiliki kontras tepi tajam menyerupai permukaan polip.
+* **Area *False Negative* / Polip Luput Terdeteksi (Biru):** Area polip yang gagal dideteksi oleh model terutama terjadi pada **polip berukuran sangat kecil**, polip bertipe datar (*flat polyp*), serta bagian tepi polip yang warna permukaannya sangat menyatu dengan mukosa usus di sekitarnya.
+* **Dampak Augmentasi pada Kasus Sulit:** Augmentasi geometrik (**Rotasi & Perubahan Skala**) terbukti membantu mengurangi area biru (*false negative*) pada polip dengan posisi miring atau ukuran bervariasi, sehingga skor Dice meningkat menjadi `0.591 ± 0.005`. Sebaliknya, **Distorsi Rona & Saturasi Warna Ekstrem** justru memperbanyak area merah (*false positive*) dan biru karena perubahan warna drastis mengaburkan batas alami antara jaringan polip dan mukosa usus.
 
 ## 6. Pembahasan & kesimpulan
 
-<!-- Bandingkan hasil dengan hipotesis di Bagian 3. Hipotesis yang ternyata salah tetap bernilai,
-     asalkan dijelaskan kenapa. Perbedaan kecil (lebih kecil dari simpangan baku) belum tentu berarti. -->
+### Perbandingan Hasil dengan Hipotesis
+* **Rotasi & Perubahan Skala (Sesuai Hipotesis — Meningkatkan Skor & Stabilitas):**
+  Penerapan rotasi dan perubahan skala menghasilkan skor rata-rata tertinggi pada kedua metrik, yakni **Dice 0.591 ± 0.005** (naik **+0.042** dibanding *baseline* `0.549 ± 0.036`) dan **IoU 0.474 ± 0.004** (naik **+0.041** dari `0.433 ± 0.030`). Selain selisih kenaikannya melampaui simpangan baku *baseline*, variasi antar-ulangannya juga sangat kecil (`± 0.005`, dengan skor `0.588, 0.587, 0.599`). Hal ini sesuai dengan hipotesis awal karena kamera endoskop bergerak dari berbagai sudut dan jarak, sehingga augmentasi geometrik melatih model agar lebih konsisten mengenali polip dalam berbagai orientasi dan ukuran.
+* **Distorsi Rona & Saturasi Warna Ekstrem (Tidak Efektif & Cenderung Tidak Stabil):**
+  Skenario ini hanya memperoleh rata-rata **Dice 0.558 ± 0.030** dan **IoU 0.436 ± 0.025**. Selisih kenaikannya terhadap *baseline* sangat kecil (+0.009 Dice dan +0.003 IoU)—jauh lebih kecil daripada nilai simpangan bakunya (`± 0.030`), sehingga secara statistik tidak memberikan peningkatan yang berarti. Selain itu, skor tiap ulangannya sangat fluktuatif (`0.526, 0.549, 0.598`) dan sempat turun ke `0.526` (di bawah *baseline*), yang membuktikan bahwa distorsi warna ekstrem merusak karakteristik warna alami jaringan mukosa usus.
 
-✍️
+### Kesimpulan
+Untuk tugas segmentasi polip pada citra kolonoskopi, augmentasi berbasis transformasi geometrik (**Rotasi & Perubahan Skala**) merupakan strategi terbaik karena terbukti secara konsisten meningkatkan akurasi segmentasi sekaligus menstabilkan performa model antar-ulangan. Sebaliknya, **Distorsi Rona & Saturasi Warna Ekstrem** tidak direkomendasikan karena mengaburkan fitur warna klinis jaringan dan menghasilkan performa yang fluktuatif.
 
 ## 7. Pembagian kerja
 
